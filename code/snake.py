@@ -4,21 +4,23 @@ Main file
 File responsible for everything
 """
 
-
 import pygame
 import random
 from pygame.locals import *
+
 
 # Funcion to randomize the apple position
 def on_grid_random():
     x = random.randint(0, 590)
     y = random.randint(0, 590)
-    return x//10 * 10, y//10 * 10
+    return x // 10 * 10, y // 10 * 10
+
 
 # Test the collision between two cells
 def collision(c1, c2):
     # Return true if the two compared cells are in the same position
     return (c1[0] == c2[0] and (c1[1] == c2[1]))
+
 
 # Directions
 UP = 0
@@ -58,39 +60,49 @@ while True:
         if event.type == QUIT:
             pygame.quit()
 
+        # Checks for the keybinds
         if event.type == KEYDOWN:
+            # Check if the up arrow key is pressed
             if event.key == K_UP:
                 my_direction = UP
+            # Check if the down arrow key is pressed
             if event.key == K_DOWN:
                 my_direction = DOWN
+            # Check if the left arrow key is pressed
             if event.key == K_LEFT:
                 my_direction = LEFT
+            # Check if the right arrow key is pressed
             if event.key == K_RIGHT:
                 my_direction = RIGHT
 
     # Checks collision with apple
     if collision(snake[0], apple_pos):
         apple_pos = on_grid_random()
-        snake.append((0,0))
+        snake.append((0, 0))
 
     # TODO check collision with wall
 
     for i in range(len(snake) - 1, 0, -1):
-        snake[i] = (snake[i-1][0], snake[i-1][1])
+        snake[i] = (snake[i - 1][0], snake[i - 1][1])
 
+    # Moves the snake up
     if my_direction == UP:
         snake[0] = (snake[0][0], snake[0][1] - 10)
+    # Moves the snake down
     if my_direction == DOWN:
         snake[0] = (snake[0][0], snake[0][1] + 10)
+    # Moves the snake to the right
     if my_direction == RIGHT:
-        snake[0] = (snake[0][0] + 10,   snake[0][1])
+        snake[0] = (snake[0][0] + 10, snake[0][1])
+    # Moves the snake to the left
     if my_direction == LEFT:
         snake[0] = (snake[0][0] - 10, snake[0][1])
 
-
     screen.fill((0, 0, 0))
     screen.blit(apple, apple_pos)
+
     for pos in snake:
         screen.blit(snake_skin, pos)
 
+    # Updates the display
     pygame.display.update()
